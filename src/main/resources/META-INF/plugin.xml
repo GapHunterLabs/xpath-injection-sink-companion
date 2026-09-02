@@ -1,0 +1,41 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>dev.gaphunter.xpathinjectionsinkcompanion</id>
+    <name>XPath Injection Sink Companion</name>
+    <vendor>Gap Hunter Labs</vendor>
+    <description><![CDATA[
+        <p>Flags an <code>XPath.evaluate(...)</code>/<code>.compile(...)</code>
+        call whose argument is built from an HTTP endpoint parameter --
+        CWE-643 (XPath Injection), the mechanism documented in the OWASP
+        Testing Guide: an attacker's raw input becomes XPath SOURCE TEXT,
+        re-parsed and evaluated by the XPath engine.</p>
+        <p>Built on a real, hand-written XPath 1.0 parser -- the THIRD
+        full custom grammar in this catalog, after the ReDoS
+        Catastrophic-Backtracking Companion's regex grammar and the
+        SpEL Injection Sink Companion's SpEL grammar. The grammar's
+        job here is noise reduction: it reconstructs the argument's
+        static skeleton (every tainted operand replaced by a
+        placeholder) and confirms it parses as well-formed XPath before
+        flagging -- it never suppresses a real injection, only skips a
+        call whose argument clearly isn't shaped like XPath source text
+        at all.</p>
+        <p>Stated honestly: v0.1 only Java, only same-method taint;
+        AWS CodeGuru Detector Library has a dedicated XPath injection
+        detector, but it's CI/batch, not an inline IDE inspection --
+        no dedicated Marketplace plugin found for this exact angle.</p>
+        <p>Free. No license nags, no telemetry, no network calls.</p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <localInspection language="JAVA"
+            groupName="XPath Injection Sink Companion"
+            displayName="XPath expression built from untrusted input"
+            enabledByDefault="true"
+            level="WARNING"
+            implementationClass="dev.gaphunter.xpathinjectionsinkcompanion.inspection.XPathInjectionSinkInspection"/>
+        <notificationGroup id="XPath Injection Sink Companion" displayType="BALLOON"/>
+    </extensions>
+</idea-plugin>
