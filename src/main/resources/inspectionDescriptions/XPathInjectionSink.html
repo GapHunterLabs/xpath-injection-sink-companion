@@ -1,0 +1,9 @@
+<html>
+<body>
+Reports an <code>XPath.evaluate(...)</code> or <code>.compile(...)</code> call whose expression is built from an HTTP
+endpoint parameter.
+<!-- tooltip end -->
+<p>The raw input becomes XPath source text, so an attacker can change what the query selects (CWE-643). Bind the
+value with an <code>XPathVariableResolver</code> instead of concatenating it into the expression.</p>
+</body>
+</html>
